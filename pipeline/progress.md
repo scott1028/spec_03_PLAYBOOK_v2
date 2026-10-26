@@ -12,7 +12,7 @@
 - [v] 1.1 pipeline.config.json
 - [v] 1.2 assets.json
 - [v] 1.3 .mcp.json
-- [x] 1.4 .claude/settings.json（Claude 被權限擋下，待使用者手動建立）
+- [v] 1.4 .claude/settings.json（Claude 被權限擋下，由使用者手動建立）
 - [v] 1.5 .gitignore
 - [v] 1.6 game/project.godot
 - [v] 1.7 game/tools/inspect_assets.gd
@@ -25,11 +25,11 @@
 - [v] 1.11.4 git commit
 
 ## Phase 2：連線 MCP（人工）
-- [ ] 2.人工 安裝 addon、啟動 server、重啟 Claude Code
-- [ ] 2.1 node tools/check_env.mjs 全部 OK
-- [ ] 2.2 mcp__godot__get_godot_version
-- [ ] 2.3 mcp__blender__get_scene_info
-- [ ] 2.4 失敗檢查
+- [v] 2.人工 安裝 addon、啟動 server、重啟 Claude Code（使用者重裝 blender MCP；addon 為 mcp-for-blender 1.8）
+- [v] 2.1 node tools/check_env.mjs 全部 OK（重裝後重跑通過）
+- [v] 2.2 mcp__godot__get_godot_version（4.7.2.stable）
+- [v] 2.3 mcp__blender__get_scene_info（重裝後成功；Blender 5.2.2 LTS）
+- [v] 2.4 失敗檢查（無失敗）
 
 ## Phase 3：單一資產冒煙測試（crate）
 - [ ] 3.1 Blender 建模 crate
