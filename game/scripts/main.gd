@@ -43,7 +43,8 @@ func _ready() -> void:
 		# The overview camera sits past the default shadow range; extend it so the far half keeps its shadows
 		($DirectionalLight3D as DirectionalLight3D).directional_shadow_max_distance = camera_distance * 2.0
 	update_camera(1.0, true)
-	if DisplayServer.get_name() != "headless":
+	# Screenshots go to ../pipeline for review; the web build has no such folder
+	if DisplayServer.get_name() != "headless" and not OS.has_feature("web"):
 		get_tree().create_timer(SCREENSHOT_DELAY).timeout.connect(save_screenshot)
 
 
