@@ -136,3 +136,20 @@
 - 雲影一開始幾乎看不到：雲以地圖中心隨機分布，但太陽在西南、雲高 15 m，影子往東北偏約 18 m，大多落在地圖外 → clouds.gd 依太陽方向把雲的漂移範圍往反方向挪
 - 全景截圖的遠半邊沒有陰影：鏡頭距離 64 m 超過 directional_shadow_max_distance 60 → `--overview` 時把陰影距離改為鏡頭距離 ×2
 - 微風：樹 0.3°–1.4°、草叢 0.8°–2.9° 持續擺動（headless 取樣確認）；陣風相位依位置沿風向推進
+
+## 2026-10-26 11:43 terrain iter 1（Phase 10）
+- check: PASS — 41.00 × 2.65 × 41.00 m、30,634 tris、has_collision=true（只有 `terrain_ground-col`）
+- 判斷: —
+- 對 Blender 的請求: —
+- 結果: PASS
+- 規格修正（匯出前）：terrain 高度原本估 2.4 m（1.5 m 土層 + 0.9 m 起伏），沒算到山頂草叢約 0.25 m，實際 2.645 m；desc 本來就含草叢，改為 2.6 m
+- 調整（匯出前）：第一版草地每個三角面隨機色差太大、像碎紙片 → 縮小深淺色差、降低隨機成分；石板路底改偏土色，鋸齒邊比較不突兀
+
+## 2026-10-26 11:40 Phase 10 地形資料流
+- 版面資料從 build_world.mjs 抽到 `world_layout.json`（抽出後 world.tscn 輸出逐字相同）；Blender 地形腳本與 builder 都讀它
+- 平整區塊：建築 / 圍牆 / 木箱 / 木桶的實際佔地（assets.json 尺寸 × scale × yaw）、道路、廣場、`flat_pads`（起點、金幣、終點、main.tscn 的木箱）、牆邊 2 m 全部壓平，外圍 2.5 m 漸變；main.tscn 的遊戲節點因此不用改高度
+- 高度表：Blender 另外寫出 `pipeline/terrain_heights.json`（0.5 m 格網）。這是資料檔，不是模型匯出；模型仍用附錄 A 標準 snippet
+- builder 依高度表擺放（樹 / 石頭 / 草叢下沉 3–10 cm），並檢查 flat_pads 高度都在 ±0.03 m 內，否則報錯要求重匯地形
+- main.tscn：Ground 改為 terrain.glb instance（y = −1.5），移除平面 mesh 與 BoxShape；Player `floor_snap_length = 0.3`
+- physics_test：起點高度改成「目標底部 + 0.5 m」，避免在坡地上生成在地面以下
+

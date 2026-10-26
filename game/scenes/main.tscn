@@ -10,6 +10,7 @@
 [ext_resource type="PackedScene" path="res://assets/goal_flag.glb" id="8_goal_flag_glb"]
 [ext_resource type="PackedScene" path="res://scenes/world.tscn" id="9_world"]
 [ext_resource type="Script" path="res://scripts/clouds.gd" id="10_clouds"]
+[ext_resource type="PackedScene" path="res://assets/terrain.glb" id="11_terrain"]
 
 [sub_resource type="ProceduralSkyMaterial" id="sky_material"]
 ground_bottom_color = Color(0.55, 0.7, 0.85, 1)
@@ -33,16 +34,6 @@ ssao_power = 1.5
 dof_blur_far_enabled = true
 dof_blur_near_enabled = true
 dof_blur_amount = 0.1
-
-[sub_resource type="StandardMaterial3D" id="ground_material"]
-albedo_color = Color(0.35, 0.6, 0.3, 1)
-
-[sub_resource type="PlaneMesh" id="ground_mesh"]
-material = SubResource("ground_material")
-size = Vector2(40, 40)
-
-[sub_resource type="BoxShape3D" id="ground_shape"]
-size = Vector3(40, 0.2, 40)
 
 [sub_resource type="CapsuleShape3D" id="player_shape"]
 radius = 0.3
@@ -69,16 +60,11 @@ directional_shadow_max_distance = 60.0
 [node name="WorldEnvironment" type="WorldEnvironment" parent="." unique_id=681301443]
 environment = SubResource("environment")
 
-[node name="Ground" type="StaticBody3D" parent="." unique_id=797697224]
-
-[node name="MeshInstance3D" type="MeshInstance3D" parent="Ground" unique_id=2058119899]
-mesh = SubResource("ground_mesh")
-
-[node name="CollisionShape3D" type="CollisionShape3D" parent="Ground" unique_id=365739125]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, -0.1, 0)
-shape = SubResource("ground_shape")
+[node name="Ground" parent="." unique_id=797697224 instance=ExtResource("11_terrain")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, -1.5, 0)
 
 [node name="Player" type="CharacterBody3D" parent="." unique_id=421068863]
+floor_snap_length = 0.3
 script = ExtResource("2_player")
 
 [node name="CollisionShape3D" type="CollisionShape3D" parent="Player" unique_id=802519269]
