@@ -28,3 +28,27 @@
 - 判斷: —
 - 對 Blender 的請求: —（第一次就通過）
 - 結果: PASS
+
+## 2026-10-26 10:37 player iter 1
+- check: FAIL — FIX player: Blender 尺寸正確但 Godot 量到 1.00m × 1.80m × 1.00m → 檢查 transform_apply 與 glTF 匯出軸向（+Y Up）
+- 判斷: pipeline 問題。crate collection 在 viewport 被我隱藏，crate-col 還保留上次 export 的選取狀態；附錄 A 的 `select_all(DESELECT)` 不處理隱藏物件，`use_selection=True` 就把 crate-col 一起匯出（export log 有 `Extracting primitive: crate`，check 也多出 has_collision=true）
+- 對 Blender 的請求: 匯出前先把所有 asset collection 設回可見，並對所有物件 `select_set(False)`，再跑標準 snippet（snippet 本身不改）
+- 結果: FAIL（iter 1）
+
+## 2026-10-26 10:37 player iter 2
+- check: PASS（0.60 × 1.80 × 0.60 m、800 tris、has_collision=false；同時重驗 crate PASS）
+- 判斷: —
+- 對 Blender 的請求: —（iter 1 的 pipeline 修正生效；之後每次 export 前都先做「所有 collection 可見 + 全部取消選取」）
+- 結果: PASS
+
+## 2026-10-26 10:38 coin iter 1
+- check: PASS（0.50 × 0.50 × 0.08 m、252 tris）
+- 判斷: —
+- 對 Blender 的請求: —（第一次就通過）
+- 結果: PASS
+
+## 2026-10-26 10:38 goal_flag iter 1
+- check: PASS（0.80 × 2.00 × 0.10 m、220 tris；旗桿放 x=-0.35 讓 bbox X 置中）
+- 判斷: —
+- 對 Blender 的請求: —（第一次就通過）
+- 結果: PASS
