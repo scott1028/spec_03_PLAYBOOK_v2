@@ -58,12 +58,12 @@
 - [v] 5.7 git commit
 
 ## Phase 6：迴圈演練
-- [ ] 6.1 log 寫下 Godot 回饋
-- [ ] 6.2 修改 assets.json coin.size_m
-- [ ] 6.3 check_assets coin 應 FAIL
-- [ ] 6.4 Blender 調整 → export → import → check PASS
-- [ ] 6.5 Coin SphereShape3D 半徑 0.3，bot_test 仍 PASS
-- [ ] 6.6 run_project 確認截圖，git commit
+- [v] 6.1 log 寫下 Godot 回饋
+- [v] 6.2 修改 assets.json coin.size_m（[0.3, 0.3, 0.06]）
+- [v] 6.3 check_assets coin 應 FAIL（如預期 FAIL，FIX 建議縮放 X/Z 0.6、Y 0.75）
+- [v] 6.4 Blender 調整 → export → import → check PASS（iter 2）
+- [v] 6.5 Coin SphereShape3D 半徑 0.3，bot_test 仍 PASS
+- [v] 6.6 run_project 確認截圖，git commit
 
 ## Phase 7：收尾
 - [ ] 7.1 撰寫 pipeline/REPORT.md
