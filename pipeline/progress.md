@@ -89,3 +89,10 @@
 - [v] 9.4 氣氛：雲漂移 + 雲影、暖色陽光 + 柔影 + SSAO、微風擺動、移軸景深；木箱改擺放
 - [v] 9.5 check_assets 全部 PASS（13 pass）、bot_test / physics_test PASS、run_project + 截圖檢查
 - [v] 9.6 log / REPORT 更新，git commit
+
+## Phase 10：地形起伏、草地與道路（PLAYBOOK 延伸）
+- [v] 10.1 版面資料抽到 world_layout.json（build_world.mjs 輸出不變）
+- [v] 10.2 assets.json 新增 terrain；Blender 建地形（起伏、草地色塊、道路、石板、草叢花朵、小石子）→ export → check PASS（iter 1）
+- [v] 10.3 匯出 pipeline/terrain_heights.json；build_world.mjs 依高度擺放、移除舊的平面土塊 / 路面
+- [v] 10.4 main.tscn 地面換成 terrain；physics_test 起點高度；bot_test / physics_test PASS
+- [v] 10.5 run_project + 截圖檢查；log / REPORT 更新，git commit

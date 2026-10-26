@@ -77,7 +77,8 @@ func drive_into(main: Node3D, target: Node3D, frames: int, is_done: Callable) ->
 	var player := main.get_node("Player") as CharacterBody3D
 	var camera := main.get_node("Camera3D") as Camera3D
 	var forward := Vector3(-camera.global_basis.z.x, 0, -camera.global_basis.z.z).normalized()
-	player.global_position = Vector3(target.global_position.x, 0.05, target.global_position.z) - forward * START_DISTANCE
+	# Start a little above the target base; the terrain may slope between the two
+	player.global_position = Vector3(target.global_position.x, target.global_position.y + 0.5, target.global_position.z) - forward * START_DISTANCE
 	player.velocity = Vector3.ZERO
 	Input.action_press("ui_up")
 	for i in frames:
