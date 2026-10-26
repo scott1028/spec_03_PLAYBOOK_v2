@@ -69,3 +69,15 @@
 - [v] 7.1 撰寫 pipeline/REPORT.md
 - [v] 7.2 git commit
 - [v] 7.3 回報 PoC 完成
+
+## Phase 8：箱庭世界 + 物理（PLAYBOOK 延伸）
+- [v] 8.1 assets.json：player 改單輪機器人，新增 tree / bush / rock / wall_brick / house / mage_tower / temple_ruins / barrel
+- [v] 8.2 player（機器人 + wheel_spin 動畫）建模 → export → import → check PASS（iter 1）
+- [v] 8.3 tree / bush / rock / barrel 建模 → check PASS（皆 iter 1）
+- [v] 8.4 wall_brick / house / mage_tower / temple_ruins 建模 → check PASS（皆 iter 1）
+- [v] 8.5 node tools/check_assets.mjs 全部 PASS（12 pass, 0 fail）
+- [v] 8.6 物理腳本與互動道具場景（player 力模型、sway / tree / bush、barrel）+ physics_test
+- [v] 8.7 tools/build_world.mjs 產生 world.tscn（106 個物件）；main.tscn 改 40×40、座標 ×2；等角跟隨鏡頭
+- [v] 8.8 import → bot_test PASS → physics_test PASS
+- [v] 8.9 run_project / get_debug_output / 跟隨截圖 + 全景截圖檢查（errors 為空）
+- [v] 8.10 log / REPORT 更新，git commit

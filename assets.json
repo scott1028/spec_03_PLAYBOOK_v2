@@ -1,12 +1,12 @@
 {
   "assets": {
     "player": {
-      "desc": "低模角色：膠囊身體、球形頭、兩個黑色眼睛，平塗顏色，正面朝 Blender -Y",
-      "size_m": [0.6, 1.8, 0.6],
+      "desc": "單輪小機器人：方頭配深色面罩和兩個發光色眼睛、天線、圓柱身體、兩隻短手臂、輪叉加一顆輪子；輪子是獨立物件 robot_tire（不可用 _wheel 結尾），原點在輪心，wheel_spin 動畫 1 秒轉一圈；平塗顏色，正面朝 Blender -Y",
+      "size_m": [0.7, 1.2, 0.5],
       "origin": "bottom_center",
       "max_tris": 3000,
       "collision": "none",
-      "anims": []
+      "anims": ["wheel_spin"]
     },
     "coin": {
       "desc": "金色扁圓柱，直立，圓面朝 Blender ±Y",
@@ -29,6 +29,70 @@
       "size_m": [0.8, 2.0, 0.1],
       "origin": "bottom_center",
       "max_tris": 800,
+      "collision": "none",
+      "anims": []
+    },
+    "tree": {
+      "desc": "低模樹：褐色樹幹加 2–3 團深淺綠低面數樹冠；只有樹幹 mesh 名稱加 -col",
+      "size_m": [2.0, 3.5, 2.0],
+      "origin": "bottom_center",
+      "max_tris": 1000,
+      "collision": "col",
+      "anims": []
+    },
+    "bush": {
+      "desc": "草叢：3–5 個深淺綠低面數扁球擠在一起",
+      "size_m": [1.2, 0.7, 1.0],
+      "origin": "bottom_center",
+      "max_tris": 600,
+      "collision": "none",
+      "anims": []
+    },
+    "rock": {
+      "desc": "2–3 塊不規則灰色低模石頭組合（固定亂數種子）",
+      "size_m": [1.4, 0.9, 1.2],
+      "origin": "bottom_center",
+      "max_tris": 400,
+      "collision": "col",
+      "anims": []
+    },
+    "wall_brick": {
+      "desc": "磚瓦牆一段：灰色灰縫底牆、表面交錯排列的紅褐磚塊、頂部深色瓦片壓頂；長邊沿 Blender X",
+      "size_m": [4.0, 1.6, 0.5],
+      "origin": "bottom_center",
+      "max_tris": 2500,
+      "collision": "col",
+      "anims": []
+    },
+    "house": {
+      "desc": "小屋：米白灰泥牆加深色木框、紅褐瓦片斜屋頂、木門、兩扇窗、石砌煙囪；門朝 Blender -Y",
+      "size_m": [4.0, 4.0, 3.5],
+      "origin": "bottom_center",
+      "max_tris": 2500,
+      "collision": "col",
+      "anims": []
+    },
+    "mage_tower": {
+      "desc": "古代奇幻法師塔：石砌圓塔身、石基座、拱窗、外凸平台、紫色錐形尖頂加金色尖端",
+      "size_m": [3.2, 8.0, 3.2],
+      "origin": "bottom_center",
+      "max_tris": 3000,
+      "collision": "col",
+      "anims": []
+    },
+    "temple_ruins": {
+      "desc": "古代神殿遺跡：三層石階基座、6 根石柱（其中 1–2 根斷裂）、殘存一段門楣、地上碎石；正面朝 Blender -Y",
+      "size_m": [6.0, 4.0, 4.0],
+      "origin": "bottom_center",
+      "max_tris": 3000,
+      "collision": "col",
+      "anims": []
+    },
+    "barrel": {
+      "desc": "木桶：木色桶身中間略鼓，上下兩圈深色鐵箍",
+      "size_m": [0.6, 0.8, 0.6],
+      "origin": "bottom_center",
+      "max_tris": 400,
       "collision": "none",
       "anims": []
     }
