@@ -27,6 +27,11 @@
 - 替代做法：直接編輯 main.tscn 補上述內容，保留 MCP 產生的 unique_id；root 由 `root` 改名為 `Main`
 - 附帶：每次 add_node 結束都印 `ERROR: N RID allocations ... leaked at exit`，是 godot-mcp headless 腳本沒 free 場景造成，不影響結果
 
+### 2026-10-26 Phase 8 world.tscn 用產生器建立
+- 現象：箱庭有 106 個 glb / 場景 instance，`add_node` 不能 instance，也設不了 transform
+- 替代做法：`tools/build_world.mjs` 用版面陣列產生 `game/scenes/world.tscn`（外牆自動排、泥土路、台座），並檢查有碰撞的物件離 bot 路線至少 1 m；main.tscn 只 instance 一個 World
+- tree / bush / barrel 場景：`create_scene` + `add_node` 建骨架（CPUParticles3D 的 scalar 屬性可由 MCP 設定），mesh / curve / gradient / shape / script 直接編輯 .tscn
+
 ---
 
 ## 2026-10-26 10:35 crate iter 1
@@ -74,3 +79,35 @@
 - 對 Blender 的請求: —（依 iter 1 的 FIX 縮放後通過）
 - 結果: PASS
 - Godot 端同步：Coin SphereShape3D 半徑 0.5 → 0.3；bot_test PASS（COIN 3/3、WIN）；run_project 無錯誤，截圖中金幣縮小且仍可見
+
+## 2026-10-26 11:01 Phase 8 資產（箱庭世界）
+每個資產都是 iter 1 PASS，沒有走到 FIX 迴圈：
+
+| 資產 | 尺寸（Godot X × Y × Z） | tris / 上限 | 碰撞 | 備註 |
+|---|---|---|---|---|
+| player | 0.70 × 1.20 × 0.51 | 1696 / 3000 | none | 單輪機器人；`robot_wheel` 原點在輪心，action `wheel_spin` 1 秒一圈（線性） |
+| tree | 2.00 × 3.50 × 2.00 | 108 / 1000 | col | 只有 `tree_trunk-col` 有碰撞 |
+| bush | 1.20 × 0.70 × 1.00 | 400 / 600 | none | |
+| rock | 1.40 × 0.90 × 1.20 | 120 / 400 | col | |
+| barrel | 0.60 × 0.80 × 0.60 | 220 / 400 | none | Godot 端用 RigidBody3D |
+| wall_brick | 4.00 × 1.60 × 0.50 | 860 / 2500 | col | 碰撞只在 `wall_core-col`，凸出的磚塊不加 |
+| house | 4.00 × 4.00 × 3.50 | 522 / 2500 | col | 門窗木框在 `house_detail`（無碰撞） |
+| mage_tower | 3.20 × 8.00 × 3.20 | 1036 / 3000 | col | |
+| temple_ruins | 6.00 × 4.00 × 4.00 | 700 / 3000 | col | 祭壇浮空水晶、碎石在 `temple_ruins_detail` |
+
+- 做法：Blender 端註冊共用 bmesh helper（`bpy.app.driver_namespace["H"]`，不存進 .blend）；建完用 `fit()` 把整個 collection 對齊 size_m 和 bottom_center
+- 匯出前一律「所有 collection 可見 + 全部取消選取」，沿用 player iter 1 學到的做法
+
+## 2026-10-26 11:07 player iter 2（Phase 8）
+- check: PASS，但 iter 1 的 glb 有 check 沒抓到的問題：Godot 匯入把名稱結尾 `_wheel` 當匯入提示，`robot_wheel` 變成 VehicleWheel3D、名稱被截成 `robot`
+- 判斷: pipeline 問題（Godot 節點名稱後綴提示：-col / -rigid / -vehicle / -wheel 等，`_` 也算）
+- 對 Blender 的請求: 輪子物件改名 `robot_tire` 後重新匯出；用 headless 腳本確認輪子是 MeshInstance3D、`wheel_spin` 軌道路徑為 `robot_tire`
+- 結果: PASS
+- 附帶：匯出的 `wheel_spin` 長度 1.04 s（第 1.0 s 轉完一圈）；Godot 端執行時把 length 設成最後一個 key 的時間，避免循環時停頓
+
+## 2026-10-26 11:10 Phase 8 Godot 端（與 PLAYBOOK 的差異與測試發現）
+- 偏離 PLAYBOOK（使用者選擇）：鏡頭改等角 45° 跟隨，方向鍵改成相對鏡頭移動；bot 模式仍走世界座標直線
+- 偏離 PLAYBOOK：player.gd 的「速度 4 m/s」改成力模型 `a = F/m − k·v` 加滾動摩擦 μg，F 取 `m(μg + k·4)` 讓極速剛好 4 m/s；Player capsule 改 r 0.3 / h 1.2
+- physics_test 抓到：空中阻力太小（0.5）時按住方向跳躍會一直加速（極速約 10 m/s）→ 空中阻力改成讓空中極速也是 4 m/s
+- 診斷：推木桶時 CharacterBody 撞上就把自己速度歸零，只有接觸那一格有推力，而且衝量打在接觸點把木桶推倒 → 改成撞擊瞬間依折合質量傳遞動量 + 接觸時加驅動力，作用在質心；木桶被推 2.13 m 且保持直立
+- 落葉粒子 0.14 m 在鏡頭距離下看不清楚 → 放大到 0.22 m、數量 32

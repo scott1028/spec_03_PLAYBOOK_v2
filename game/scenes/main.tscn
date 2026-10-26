@@ -8,8 +8,11 @@
 [ext_resource type="PackedScene" uid="uid://b133j5qu2duby" path="res://assets/coin.glb" id="6_coin_glb"]
 [ext_resource type="PackedScene" uid="uid://cj6okdso35vt6" path="res://assets/crate.glb" id="7_crate_glb"]
 [ext_resource type="PackedScene" uid="uid://blx2kfvyp48gk" path="res://assets/goal_flag.glb" id="8_goal_flag_glb"]
+[ext_resource type="PackedScene" path="res://scenes/world.tscn" id="9_world"]
 
 [sub_resource type="ProceduralSkyMaterial" id="sky_material"]
+ground_bottom_color = Color(0.55, 0.7, 0.85, 1)
+ground_horizon_color = Color(0.65, 0.78, 0.9, 1)
 
 [sub_resource type="Sky" id="sky"]
 sky_material = SubResource("sky_material")
@@ -23,14 +26,14 @@ albedo_color = Color(0.35, 0.6, 0.3, 1)
 
 [sub_resource type="PlaneMesh" id="ground_mesh"]
 material = SubResource("ground_material")
-size = Vector2(20, 20)
+size = Vector2(40, 40)
 
 [sub_resource type="BoxShape3D" id="ground_shape"]
-size = Vector3(20, 0.2, 20)
+size = Vector3(40, 0.2, 40)
 
 [sub_resource type="CapsuleShape3D" id="player_shape"]
 radius = 0.3
-height = 1.8
+height = 1.2
 
 [sub_resource type="SphereShape3D" id="coin_shape"]
 radius = 0.3
@@ -44,6 +47,7 @@ script = ExtResource("1_main")
 [node name="DirectionalLight3D" type="DirectionalLight3D" parent="." unique_id=1768323281]
 transform = Transform3D(0.866025, 0.383022, -0.321394, 0, 0.642788, 0.766044, 0.5, -0.663414, 0.55667, 0, 10, 0)
 shadow_enabled = true
+directional_shadow_max_distance = 60.0
 
 [node name="WorldEnvironment" type="WorldEnvironment" parent="." unique_id=681301443]
 environment = SubResource("environment")
@@ -61,7 +65,7 @@ shape = SubResource("ground_shape")
 script = ExtResource("2_player")
 
 [node name="CollisionShape3D" type="CollisionShape3D" parent="Player" unique_id=802519269]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0.9, 0)
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0.6, 0)
 shape = SubResource("player_shape")
 
 [node name="Visual" parent="Player" instance=ExtResource("5_player_glb")]
@@ -72,7 +76,7 @@ transform = Transform3D(1, 0, 0, 0, 0.707107, 0.707107, 0, -0.707107, 0.707107, 
 [node name="Coins" type="Node3D" parent="." unique_id=1896825831]
 
 [node name="Coin1" type="Area3D" parent="Coins" unique_id=2133984244]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 3, 0, 0)
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 6, 0, 0)
 script = ExtResource("3_coin")
 
 [node name="CollisionShape3D" type="CollisionShape3D" parent="Coins/Coin1" unique_id=1713094655]
@@ -83,7 +87,7 @@ shape = SubResource("coin_shape")
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0.5, 0)
 
 [node name="Coin2" type="Area3D" parent="Coins" unique_id=1431277769]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 3, 0, 4)
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 6, 0, 8)
 script = ExtResource("3_coin")
 
 [node name="CollisionShape3D" type="CollisionShape3D" parent="Coins/Coin2" unique_id=1287435693]
@@ -94,7 +98,7 @@ shape = SubResource("coin_shape")
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0.5, 0)
 
 [node name="Coin3" type="Area3D" parent="Coins" unique_id=55179189]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -2, 0, 4)
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -4, 0, 8)
 script = ExtResource("3_coin")
 
 [node name="CollisionShape3D" type="CollisionShape3D" parent="Coins/Coin3" unique_id=1773773260]
@@ -107,16 +111,16 @@ transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0.5, 0)
 [node name="Crates" type="Node3D" parent="." unique_id=2126911064]
 
 [node name="Crate1" parent="Crates" instance=ExtResource("7_crate_glb")]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 6, 0, 2)
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 12, 0, 4)
 
 [node name="Crate2" parent="Crates" instance=ExtResource("7_crate_glb")]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, -5)
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, -10)
 
 [node name="Crate3" parent="Crates" instance=ExtResource("7_crate_glb")]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -6, 0, 1)
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -12, 0, 2)
 
 [node name="Goal" type="Area3D" parent="." unique_id=445753740]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -4, 0, -3)
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -8, 0, -6)
 script = ExtResource("4_goal")
 
 [node name="CollisionShape3D" type="CollisionShape3D" parent="Goal" unique_id=850746822]
@@ -124,3 +128,5 @@ transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 1, 0)
 shape = SubResource("goal_shape")
 
 [node name="goal_flag" parent="Goal" instance=ExtResource("8_goal_flag_glb")]
+
+[node name="World" parent="." instance=ExtResource("9_world")]

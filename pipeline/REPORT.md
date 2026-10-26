@@ -84,3 +84,45 @@ Time ─────────────────────────
 4. **Godot 場景改用 headless builder 腳本**：寫一支 `game/tools/build_main.gd`，用 `godot --headless -s` 一次建好整個 main.tscn（含 transform 和 Resource）。比 20 次 `add_node` 加手改快，也能重跑。
 5. **把角色朝向納入 check**：`check_assets` 目前不驗「正面朝 +Z」，這輪只靠截圖確認。可以約定眼睛 mesh 命名，由 inspect 檢查它的 Z 是否為正。
 6. **拆 sub-agent**：以 `assets.json` 當合約，一個 agent 負責 Blender 建模和 check 迴圈，另一個負責 Godot 場景和 bot test。Blender 只有一個 live 實例，建模本身不適合平行。
+
+## Phase 8：箱庭世界 + 物理
+
+這一輪把 20×20 的平面改成 40×40、四周有磚牆的箱庭，角色換成單輪機器人，並加上物理互動。原本的 DoD 都還成立，另外多了一支物理測試。
+
+| 狀態 | 項目 | 證據 |
+|---|---|---|
+| [v] | 12 個資產 `check_assets` 全部 PASS（新增 8 個、player 重做） | `SUMMARY: 12 pass, 0 fail`，全部 iter 1 通過（player 因改名重匯一次） |
+| [v] | Bot 仍輸出 `COIN 3/3`、`WIN` | `BOT: PASS`；座標 ×2，`build_world.mjs` 會擋下太靠近 bot 路線的物件 |
+| [v] | 物理測試 | `PHYSICS: PASS`：極速 3.99 m/s、放開 1 s 內停下、空中加速較弱且不超速、撞樹落葉 + 搖晃、木桶被推 2.13 m |
+| [v] | `run_project` 無錯誤，截圖已檢查 | 跟隨截圖 `pipeline/screenshot.png`、全景截圖 `pipeline/screenshot_overview.png`（`-- --overview`） |
+
+### 場景裡有什麼
+
+```text
+            北（遠離鏡頭，放高的）
+   法師塔   神殿遺跡(終點旗在前)   村莊：房子×3 + 磚牆圍籬 + 木桶
+   西：森林            中央廣場 + 3 條泥土路            東：樹、石頭
+   西南：磚牆小菜園     南：木箱 + 木桶、石頭、草叢（低矮）
+            南（靠近鏡頭）
+```
+
+鏡頭在東南方往西北看，所以高的建築放北、西兩側，比較不會擋到機器人。外牆 40 段、場內 66 個物件，都由 `node tools/build_world.mjs` 產生。
+
+### 物理怎麼做
+
+| 效果 | 做法 |
+|---|---|
+| 走路的力與摩擦 | `a = F/m − k·v`，地面再加滾動摩擦 μg；F 取 `m(μg + k·4)`，極速剛好 4 m/s。空中只有 30% 推力，阻力讓空中極速也是 4 m/s |
+| 機身傾斜 | 依實際加速度往前 / 側邊傾斜（最多 0.3 rad），支點在輪子著地點 |
+| 輪子動畫 | Blender 的 `wheel_spin`（1 秒一圈）；`speed_scale = v / 2πr`，輪子不打滑，停下就停轉 |
+| 撞樹 | 衝擊速度傳給樹的阻尼彈簧搖晃；衝擊 ≥ 1 m/s 時掉落葉（CPUParticles3D） |
+| 推木桶 | RigidBody3D 3 kg；撞上瞬間依折合質量傳遞動量，接觸時再加驅動力 |
+| 穿過草叢 | 草叢沒有碰撞，經過時依速度晃動（bot 路線上刻意放了一叢） |
+
+### 這輪踩到的坑
+
+1. **Godot 的節點名稱後綴**：`robot_wheel` 被當成 `-wheel` 匯入提示，變成 VehicleWheel3D、名字被截斷，check 沒抓到。改名 `robot_tire` 後正常。名稱結尾要避開 `col`、`rigid`、`vehicle`、`wheel` 這些字。
+2. **跳躍加速**：空中阻力太小時，按住方向跳躍會越跳越快，physics test 抓到後修正。
+3. **CharacterBody 推不動 RigidBody**：撞上時自己的速度被歸零，推力只剩一格。改成動量傳遞後才有推的手感。
+
+REPORT 前面「建議的下一步」第 4 項（headless builder）已經用 `tools/build_world.mjs` 做了；其他項目仍未處理。
