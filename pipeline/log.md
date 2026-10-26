@@ -58,3 +58,19 @@
 - 判斷: —
 - 對 Blender 的請求: —（第一次就通過）
 - 結果: PASS
+
+## 2026-10-26 10:44 Phase 6 迴圈演練
+- Godot 回饋：coin 太大、擋視線 → 規格改為 [0.3, 0.3, 0.06]
+
+## 2026-10-26 10:44 coin iter 1（規格變更後）
+- check: FAIL — FIX coin: X 寬 0.50m，規格 0.30m → 在 Blender 沿 X 軸縮放 0.600 後 apply scale；Y 高 0.50m，規格 0.30m → 在 Blender 沿 Z 軸縮放 0.600 後 apply scale；Z 深 0.08m，規格 0.06m → 在 Blender 沿 Y 軸縮放 0.750 後 apply scale
+- 判斷: 建模問題（規格變更，Blender / Godot 尺寸一致偏大）
+- 對 Blender 的請求: coin 物件以原點（底部中心）為基準縮放 (X 0.6, Y 0.75, Z 0.6)，由標準 snippet apply scale 後重新匯出
+- 結果: FAIL（iter 1，符合預期：確認判斷機制有效）
+
+## 2026-10-26 10:43 coin iter 2（規格變更後）
+- check: PASS（0.30 × 0.30 × 0.06 m、252 tris）
+- 判斷: —
+- 對 Blender 的請求: —（依 iter 1 的 FIX 縮放後通過）
+- 結果: PASS
+- Godot 端同步：Coin SphereShape3D 半徑 0.5 → 0.3；bot_test PASS（COIN 3/3、WIN）；run_project 無錯誤，截圖中金幣縮小且仍可見
