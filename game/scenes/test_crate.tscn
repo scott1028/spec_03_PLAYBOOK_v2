@@ -1,0 +1,7 @@
+[gd_scene format=3]
+
+[ext_resource type="PackedScene" uid="uid://cj6okdso35vt6" path="res://assets/crate.glb" id="1_crate"]
+
+[node name="root" type="Node3D" unique_id=544402881]
+
+[node name="crate" parent="." instance=ExtResource("1_crate")]

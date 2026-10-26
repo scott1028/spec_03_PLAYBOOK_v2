@@ -17,4 +17,14 @@
 - 現象：PLAYBOOK 3.2 指定的 `get_viewport_screenshot` 在目前 MCP（mcp-for-blender）不存在
 - 替代做法：改用 `mcp__blender__look`（viewport / angles 模式）做截圖自檢
 
+### 2026-10-26 Phase 3.6 godot MCP add_node 無法 instance .glb
+- 現象：`add_node` 只走 `ClassDB.instantiate()` 或 script class，不支援 PackedScene；properties 用 `Node.set()` 塞 JSON 值，Resource / Vector3 類型設不進去
+- 替代做法：`create_scene` 建空場景後，直接編輯 .tscn 加 `ext_resource`（PackedScene，用 .glb.import 的 uid）與 `instance=ExtResource(...)` 節點
+
 ---
+
+## 2026-10-26 10:35 crate iter 1
+- check: PASS（1.00 × 1.00 × 1.00 m、156 tris、has_collision=true）
+- 判斷: —
+- 對 Blender 的請求: —（第一次就通過）
+- 結果: PASS
