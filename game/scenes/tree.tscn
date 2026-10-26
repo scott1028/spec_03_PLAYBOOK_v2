@@ -24,6 +24,8 @@ colors = PackedColorArray(0.1, 0.4, 0.05, 1, 0.45, 0.55, 0.1, 1, 0.75, 0.42, 0.0
 [node name="Tree" type="Node3D" unique_id=317701297]
 script = ExtResource("1_tree")
 push_gain = 0.25
+wind_amplitude = 0.025
+wind_frequency = 0.35
 
 [node name="Model" parent="." instance=ExtResource("2_tree_glb")]
 

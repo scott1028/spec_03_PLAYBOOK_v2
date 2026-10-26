@@ -34,24 +34,42 @@ func expect(is_ok: bool, label: String) -> void:
 
 func check_velocity_model() -> void:
 	var g: float = ProjectSettings.get_setting("physics/3d/default_gravity")
-	var force := Player.MASS * (Player.ROLLING_FRICTION * g + Player.DRAG * Player.MAX_SPEED)
+	var step := func(v: Vector3, dir: Vector3, on_floor: bool, top_speed: float, is_braking: bool) -> Vector3:
+		return Player.step_velocity(v, dir, on_floor, top_speed, is_braking, g, DT)
 	var v := Vector3.ZERO
 	for i in 90:
-		v = Player.step_velocity(v, Vector3.RIGHT, true, force, g, DT)
+		v = step.call(v, Vector3.RIGHT, true, Player.MAX_SPEED, false)
 	expect(v.length() > 3.8 and v.length() < 4.05, "top speed after 1.5 s = %.2f m/s" % v.length())
 	for i in 60:
-		v = Player.step_velocity(v, Vector3.ZERO, true, force, g, DT)
+		v = step.call(v, Vector3.ZERO, true, Player.MAX_SPEED, false)
 	expect(v.is_zero_approx(), "friction stops the robot within 1 s (%.3f m/s)" % v.length())
 	var ground := Vector3.ZERO
 	var air := Vector3.ZERO
 	for i in 6:
-		ground = Player.step_velocity(ground, Vector3.RIGHT, true, force, g, DT)
-		air = Player.step_velocity(air, Vector3.RIGHT, false, force, g, DT)
+		ground = step.call(ground, Vector3.RIGHT, true, Player.MAX_SPEED, false)
+		air = step.call(air, Vector3.RIGHT, false, Player.MAX_SPEED, false)
 	expect(air.length() < ground.length() * 0.5, "air control is weaker after 0.1 s (air %.2f vs ground %.2f)" % [air.length(), ground.length()])
 	air = Vector3.RIGHT * Player.MAX_SPEED
 	for i in 60:
-		air = Player.step_velocity(air, Vector3.RIGHT, false, force, g, DT)
+		air = step.call(air, Vector3.RIGHT, false, Player.MAX_SPEED, false)
 	expect(air.length() <= Player.MAX_SPEED + 0.01, "jumping does not exceed top speed (%.2f m/s)" % air.length())
+	v = Vector3.ZERO
+	for i in 120:
+		v = step.call(v, Vector3.RIGHT, true, Player.BOOST_SPEED, false)
+	expect(v.length() > 6.7 and v.length() < 7.05, "boost top speed after 2 s = %.2f m/s" % v.length())
+	var coast_frames := count_stop_frames(step, Player.BOOST_SPEED, false)
+	var brake_frames := count_stop_frames(step, Player.BOOST_SPEED, true)
+	expect(brake_frames <= 30 and brake_frames < coast_frames * 0.7, "brake stops from 7 m/s in %d frames (coasting %d)" % [brake_frames, coast_frames])
+
+
+func count_stop_frames(step: Callable, speed: float, is_braking: bool) -> int:
+	var v := Vector3.RIGHT * speed
+	var frames := 0
+	while not v.is_zero_approx() and frames < 600:
+		# Brake test still holds the direction key: braking must override the drive
+		v = step.call(v, Vector3.RIGHT if is_braking else Vector3.ZERO, true, Player.MAX_SPEED, is_braking)
+		frames += 1
+	return frames
 
 
 # Place the robot so `target` is straight ahead on ui_up, then hold ui_up.

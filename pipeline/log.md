@@ -32,6 +32,11 @@
 - 替代做法：`tools/build_world.mjs` 用版面陣列產生 `game/scenes/world.tscn`（外牆自動排、泥土路、台座），並檢查有碰撞的物件離 bot 路線至少 1 m；main.tscn 只 instance 一個 World
 - tree / bush / barrel 場景：`create_scene` + `add_node` 建骨架（CPUParticles3D 的 scalar 屬性可由 MCP 設定），mesh / curve / gradient / shape / script 直接編輯 .tscn
 
+### 2026-10-26 Phase 9 add_node 會重新序列化整個場景
+- 現象：用 `add_node` 在 main.tscn 加 Clouds 時，godot-mcp 載入後用 ResourceSaver 重存整個檔案：ext_resource 的 uid 被拿掉、instance 節點補上 `type` 和 `unique_id`
+- 影響：內容正確，但 diff 會出現和這次改動無關的格式變化
+- 替代做法：接受 Godot 的正規化格式；script、NodePath 等仍直接編輯 .tscn
+
 ---
 
 ## 2026-10-26 10:35 crate iter 1
@@ -111,3 +116,23 @@
 - physics_test 抓到：空中阻力太小（0.5）時按住方向跳躍會一直加速（極速約 10 m/s）→ 空中阻力改成讓空中極速也是 4 m/s
 - 診斷：推木桶時 CharacterBody 撞上就把自己速度歸零，只有接觸那一格有推力，而且衝量打在接觸點把木桶推倒 → 改成撞擊瞬間依折合質量傳遞動量 + 接觸時加驅動力，作用在質心；木桶被推 2.13 m 且保持直立
 - 落葉粒子 0.14 m 在鏡頭距離下看不清楚 → 放大到 0.22 m、數量 32
+
+## 2026-10-26 11:30 crate iter 1（Phase 9 規格變更）
+- check: FAIL — FIX crate: X 寬 1.00m，規格 0.80m → 在 Blender 沿 X 軸縮放 0.800 後 apply scale（Y、Z 同）
+- 判斷: 建模問題（使用者回饋木箱和場景不搭：素面方塊 + 粗框條、尺寸偏大）；不只縮放，依新 desc 重做
+- 對 Blender 的請求: 重做為 0.8 m 中世紀木板箱（木板縫、斜撐、鐵角片），碰撞只放在簡單牆芯 `crate_core-col`
+- 結果: FAIL（iter 1，規格變更預期中）
+
+## 2026-10-26 11:26 crate iter 2 / cloud iter 1（Phase 9）
+- check: PASS — crate 0.80 × 0.80 × 0.80 m、540 tris、has_collision=true；cloud 5.00 × 1.60 × 3.00 m、480 tris
+- 判斷: —
+- 對 Blender 的請求: —
+- 結果: PASS
+
+## 2026-10-26 11:30 Phase 9 Godot 端
+- 偏離 PLAYBOOK：Crates 三個主木箱不再用 Phase 5 配置表的座標，改放在村莊院子 (13.2, −5.6)、西南菜園角落 (−9.2, 13.6)，以及疊在南邊木箱上 (4.55, 0.8, 11.05)；都離 bot 路線 2 m 以上
+- 輸入：新增 boost（鍵盤 A 實體鍵、手把 X）/ brake（鍵盤 B 實體鍵、手把 B）；Godot 4.7 預設 `ui_accept` 沒有手把 A，在 project.godot 覆寫 ui_accept 補上 Joypad Button 0；CLAUDE.md 的輸入規則同步更新
+- 加速 / 煞車沿用力模型：加速把極速參數換成 7 m/s（推力隨之變大）；煞車切斷推力、摩擦係數 0.15 → 0.8。physics_test：加速極速 7.00 m/s、煞車 23 格停下（滑行 44 格）
+- 雲影一開始幾乎看不到：雲以地圖中心隨機分布，但太陽在西南、雲高 15 m，影子往東北偏約 18 m，大多落在地圖外 → clouds.gd 依太陽方向把雲的漂移範圍往反方向挪
+- 全景截圖的遠半邊沒有陰影：鏡頭距離 64 m 超過 directional_shadow_max_distance 60 → `--overview` 時把陰影距離改為鏡頭距離 ×2
+- 微風：樹 0.3°–1.4°、草叢 0.8°–2.9° 持續擺動（headless 取樣確認）；陣風相位依位置沿風向推進
