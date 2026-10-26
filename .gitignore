@@ -2,3 +2,4 @@ game/.godot/
 blender/*.blend1
 pipeline/screenshot.png
 pipeline/screenshot_overview.png
+build/
