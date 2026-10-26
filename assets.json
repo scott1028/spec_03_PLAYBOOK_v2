@@ -1,0 +1,36 @@
+{
+  "assets": {
+    "player": {
+      "desc": "低模角色：膠囊身體、球形頭、兩個黑色眼睛，平塗顏色，正面朝 Blender -Y",
+      "size_m": [0.6, 1.8, 0.6],
+      "origin": "bottom_center",
+      "max_tris": 3000,
+      "collision": "none",
+      "anims": []
+    },
+    "coin": {
+      "desc": "金色扁圓柱，直立，圓面朝 Blender ±Y",
+      "size_m": [0.5, 0.5, 0.08],
+      "origin": "bottom_center",
+      "max_tris": 500,
+      "collision": "none",
+      "anims": []
+    },
+    "crate": {
+      "desc": "木箱，邊緣有深色框條，平塗顏色",
+      "size_m": [1.0, 1.0, 1.0],
+      "origin": "bottom_center",
+      "max_tris": 1000,
+      "collision": "col",
+      "anims": []
+    },
+    "goal_flag": {
+      "desc": "灰色旗桿加紅色三角旗",
+      "size_m": [0.8, 2.0, 0.1],
+      "origin": "bottom_center",
+      "max_tris": 800,
+      "collision": "none",
+      "anims": []
+    }
+  }
+}
