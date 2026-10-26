@@ -66,6 +66,6 @@
 - [v] 6.6 run_project 確認截圖，git commit
 
 ## Phase 7：收尾
-- [ ] 7.1 撰寫 pipeline/REPORT.md
-- [ ] 7.2 git commit
-- [ ] 7.3 回報 PoC 完成
+- [v] 7.1 撰寫 pipeline/REPORT.md
+- [v] 7.2 git commit
+- [v] 7.3 回報 PoC 完成
