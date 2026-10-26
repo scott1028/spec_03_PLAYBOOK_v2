@@ -1,0 +1,7 @@
+{
+  "projectRoot": "/home/scott/workspace/testbed/app21",
+  "godotPath": "/home/scott/tools/bin/godot",
+  "blenderPort": 9876,
+  "maxIterations": 3,
+  "sizeTolerance": { "relative": 0.10, "absoluteMin": 0.02 }
+}
