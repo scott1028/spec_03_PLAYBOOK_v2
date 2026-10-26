@@ -81,3 +81,11 @@
 - [v] 8.8 import → bot_test PASS → physics_test PASS
 - [v] 8.9 run_project / get_debug_output / 跟隨截圖 + 全景截圖檢查（errors 為空）
 - [v] 8.10 log / REPORT 更新，git commit
+
+## Phase 9：木箱重做、加速 / 煞車、氣氛（PLAYBOOK 延伸）
+- [v] 9.1 assets.json：crate 改 0.8 m 中世紀木板箱，新增 cloud
+- [v] 9.2 crate / cloud 建模 → export → import → check PASS（crate iter 2、cloud iter 1）
+- [v] 9.3 加速 / 煞車：input map（boost / brake）、player 力模型、physics_test、CLAUDE.md
+- [v] 9.4 氣氛：雲漂移 + 雲影、暖色陽光 + 柔影 + SSAO、微風擺動、移軸景深；木箱改擺放
+- [v] 9.5 check_assets 全部 PASS（13 pass）、bot_test / physics_test PASS、run_project + 截圖檢查
+- [v] 9.6 log / REPORT 更新，git commit

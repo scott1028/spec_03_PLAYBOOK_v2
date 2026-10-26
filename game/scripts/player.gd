@@ -2,9 +2,11 @@ extends CharacterBody3D
 # Unicycle robot driven by forces: a = F/m - drag*v, plus rolling friction on the ground.
 
 const MAX_SPEED := 4.0
+const BOOST_SPEED := 7.0
 const MASS := 2.0
 const DRAG := 4.0  # 1/s, linear resistance on the ground
 const ROLLING_FRICTION := 0.15  # mu
+const BRAKE_FRICTION := 0.8  # mu with the wheel locked
 const AIR_CONTROL := 0.3
 const JUMP_VELOCITY := 4.5
 const REACH_DISTANCE := 0.3
@@ -16,8 +18,7 @@ const HIT_MIN_SPEED := 0.5
 const BOT_TARGET_PATHS := ["../Coins/Coin1", "../Coins/Coin2", "../Coins/Coin3", "../Goal"]
 
 var gravity: float = ProjectSettings.get_setting("physics/3d/default_gravity")
-# Drive force chosen so terminal ground speed is exactly MAX_SPEED
-var move_force := MASS * (ROLLING_FRICTION * gravity + DRAG * MAX_SPEED)
+var drive_force := get_drive_force(MAX_SPEED, gravity)
 var is_bot := "--bot" in OS.get_cmdline_user_args()
 var bot_targets: Array[Vector3] = []
 var bot_target_index := 0
@@ -51,7 +52,10 @@ func _physics_process(delta: float) -> void:
 		velocity.y = JUMP_VELOCITY
 
 	var dir := get_bot_direction() if is_bot else get_input_direction()
-	var horizontal := step_velocity(Vector3(velocity.x, 0, velocity.z), dir, is_on_floor(), move_force, gravity, delta)
+	var is_braking := not is_bot and Input.is_action_pressed("brake")
+	var top_speed := BOOST_SPEED if not is_bot and Input.is_action_pressed("boost") else MAX_SPEED
+	drive_force = get_drive_force(top_speed, gravity)
+	var horizontal := step_velocity(Vector3(velocity.x, 0, velocity.z), dir, is_on_floor(), top_speed, is_braking, gravity, delta)
 	velocity.x = horizontal.x
 	velocity.z = horizontal.z
 
@@ -61,14 +65,23 @@ func _physics_process(delta: float) -> void:
 	update_visual(delta)
 
 
-static func step_velocity(v: Vector3, dir: Vector3, on_floor: bool, force: float, g: float, delta: float) -> Vector3:
+static func get_drive_force(top_speed: float, g: float) -> float:
+	# Terminal ground speed equals top_speed: F/m = mu*g + DRAG*top_speed
+	return MASS * (ROLLING_FRICTION * g + DRAG * top_speed)
+
+
+static func step_velocity(v: Vector3, dir: Vector3, on_floor: bool, top_speed: float, is_braking: bool, g: float, delta: float) -> Vector3:
+	if is_braking:
+		dir = Vector3.ZERO  # braking cuts the drive
+	var force := get_drive_force(top_speed, g)
 	var drive := force if on_floor else force * AIR_CONTROL
-	# Air drag keeps the air terminal speed at MAX_SPEED, so jumping never speeds the robot up
-	var drag := DRAG if on_floor else drive / (MASS * MAX_SPEED)
+	# Air drag keeps the air terminal speed at top_speed, so jumping never speeds the robot up
+	var drag := DRAG if on_floor else drive / (MASS * top_speed)
 	v += (dir * drive / MASS - v * drag) * delta
 	if on_floor:
-		# Rolling friction opposes motion with constant deceleration and never reverses it
-		v = v.normalized() * maxf(v.length() - ROLLING_FRICTION * g * delta, 0.0)
+		# Rolling (or braking) friction: constant deceleration against motion, never reverses it
+		var friction := BRAKE_FRICTION if is_braking else ROLLING_FRICTION
+		v = v.normalized() * maxf(v.length() - friction * g * delta, 0.0)
 	return v
 
 
@@ -83,7 +96,7 @@ func handle_collisions(pre_slide_velocity: Vector3, delta: float) -> void:
 			# Inelastic hit: impulse = reduced mass * closing speed, plus the drive force while in contact
 			var closing_speed := maxf((pre_slide_velocity - body.linear_velocity).dot(push_dir), 0.0)
 			var reduced_mass := MASS * body.mass / (MASS + body.mass)
-			body.apply_central_impulse(push_dir * (reduced_mass * closing_speed + move_force * delta))
+			body.apply_central_impulse(push_dir * (reduced_mass * closing_speed + drive_force * delta))
 			continue
 		var impact_speed := -pre_slide_velocity.dot(normal)
 		if impact_speed < HIT_MIN_SPEED:

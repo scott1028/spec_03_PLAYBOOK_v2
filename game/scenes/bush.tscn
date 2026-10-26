@@ -12,6 +12,8 @@ script = ExtResource("1_bush")
 stiffness = 60.0
 damping = 6.0
 push_gain = 0.12
+wind_amplitude = 0.05
+wind_frequency = 0.7
 
 [node name="Model" parent="." instance=ExtResource("2_bush_glb")]
 

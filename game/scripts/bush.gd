@@ -7,6 +7,7 @@ const MIN_SPEED := 0.1
 
 
 func _ready() -> void:
+	super()
 	trigger.body_entered.connect(_on_body_moved)
 	trigger.body_exited.connect(_on_body_moved)
 

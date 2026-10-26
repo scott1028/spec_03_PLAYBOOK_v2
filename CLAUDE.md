@@ -27,5 +27,5 @@
 
 ## Godot 規則
 - 腳本放 game/scripts/，場景放 game/scenes/
-- 輸入只用內建的 ui_left / ui_right / ui_up / ui_down / ui_accept
+- 輸入只用內建的 ui_left / ui_right / ui_up / ui_down / ui_accept（另加手把 A 跳躍），以及自訂的 boost（鍵盤 A、手把 X）/ brake（鍵盤 B、手把 B）；input map 定義在 game/project.godot
 - 優先使用 Godot MCP 工具；做不到再直接編輯 .tscn，並記到 log 的「MCP 問題」

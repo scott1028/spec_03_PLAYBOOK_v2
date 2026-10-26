@@ -216,16 +216,19 @@ transform = Transform3D(0, 0, -1, 0, 1, 0, 1, 0, 0, 15.5, 0, -9)
 [node name="Props" type="Node3D" parent="."]
 
 [node name="Crate01" parent="Props" instance=ExtResource("5_crate")]
-transform = Transform3D(0.7727, 0, 0.2071, 0, 0.8, 0, -0.2071, 0, 0.7727, 12.6, 0, -12.6)
+transform = Transform3D(0.9659, 0, 0.2588, 0, 1, 0, -0.2588, 0, 0.9659, 12.6, 0, -12.6)
 
 [node name="Crate02" parent="Props" instance=ExtResource("5_crate")]
-transform = Transform3D(0.7878, 0, -0.1389, 0, 0.8, 0, 0.1389, 0, 0.7878, 11.7, 0, -12)
+transform = Transform3D(0.8371, 0, -0.1476, 0, 0.85, 0, 0.1476, 0, 0.8371, 11.7, 0, -12)
 
 [node name="Crate03" parent="Props" instance=ExtResource("5_crate")]
-transform = Transform3D(0.8457, 0, 0.3078, 0, 0.9, 0, -0.3078, 0, 0.8457, 4.5, 0, 11)
+transform = Transform3D(0.8468, 0, -0.0741, 0, 0.85, 0, 0.0741, 0, 0.8468, 14.1, 0, -5.9)
 
 [node name="Crate04" parent="Props" instance=ExtResource("5_crate")]
-transform = Transform3D(0.6761, 0, -0.1812, 0, 0.7, 0, 0.1812, 0, 0.6761, 5.4, 0, 11.7)
+transform = Transform3D(0.9397, 0, 0.342, 0, 1, 0, -0.342, 0, 0.9397, 4.5, 0, 11)
+
+[node name="Crate05" parent="Props" instance=ExtResource("5_crate")]
+transform = Transform3D(0.821, 0, -0.22, 0, 0.85, 0, 0.22, 0, 0.821, 5.4, 0, 11.7)
 
 [node name="Barrels" type="Node3D" parent="."]
 
