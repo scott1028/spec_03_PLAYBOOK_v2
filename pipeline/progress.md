@@ -49,13 +49,13 @@
 - [v] 4.3 git commit
 
 ## Phase 5：Godot 遊戲實作
-- [ ] 5.1 建立 main.tscn
-- [ ] 5.2 撰寫腳本
-- [ ] 5.3 node tools/import.mjs
-- [ ] 5.4 node tools/bot_test.mjs PASS
-- [ ] 5.5 run_project / get_debug_output / stop_project
-- [ ] 5.6 檢查 pipeline/screenshot.png
-- [ ] 5.7 git commit
+- [v] 5.1 建立 main.tscn（MCP 建骨架，transform/shape/script/glb instance 直接編輯 .tscn；見 log）
+- [v] 5.2 撰寫腳本（main / player / coin / goal）
+- [v] 5.3 node tools/import.mjs（0 ERROR/WARNING，無 UID 警告）
+- [v] 5.4 node tools/bot_test.mjs PASS（第一次就通過）
+- [v] 5.5 run_project / get_debug_output / stop_project（errors 為空）
+- [v] 5.6 檢查 pipeline/screenshot.png（四種資產可見、比例合理、無倒立/躺平）
+- [v] 5.7 git commit
 
 ## Phase 6：迴圈演練
 - [ ] 6.1 log 寫下 Godot 回饋

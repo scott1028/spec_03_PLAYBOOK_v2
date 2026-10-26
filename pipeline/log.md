@@ -21,6 +21,12 @@
 - 現象：`add_node` 只走 `ClassDB.instantiate()` 或 script class，不支援 PackedScene；properties 用 `Node.set()` 塞 JSON 值，Resource / Vector3 類型設不進去
 - 替代做法：`create_scene` 建空場景後，直接編輯 .tscn 加 `ext_resource`（PackedScene，用 .glb.import 的 uid）與 `instance=ExtResource(...)` 節點
 
+### 2026-10-26 Phase 5.1 main.tscn 只有節點骨架能用 MCP 建
+- MCP 完成：`create_scene` + 18 次 `add_node`（所有內建節點、DirectionalLight3D 的 `shadow_enabled=true`）+ `save_scene`
+- MCP 做不到：transform（Vector3/Transform3D 從 JSON 進來是 Array，`Node.set()` 設不進去）、shape / mesh / environment 等 Resource、script 掛載、glb instance
+- 替代做法：直接編輯 main.tscn 補上述內容，保留 MCP 產生的 unique_id；root 由 `root` 改名為 `Main`
+- 附帶：每次 add_node 結束都印 `ERROR: N RID allocations ... leaked at exit`，是 godot-mcp headless 腳本沒 free 場景造成，不影響結果
+
 ---
 
 ## 2026-10-26 10:35 crate iter 1
