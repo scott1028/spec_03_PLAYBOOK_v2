@@ -32,14 +32,14 @@
 - [v] 2.4 失敗檢查（無失敗）
 
 ## Phase 3：單一資產冒煙測試（crate）
-- [ ] 3.1 Blender 建模 crate
-- [ ] 3.2 截圖自檢
-- [ ] 3.3 標準 export
-- [ ] 3.4 node tools/import.mjs
-- [ ] 3.5 node tools/check_assets.mjs crate PASS
-- [ ] 3.6 建立 test_crate.tscn 並 instance crate.glb
-- [ ] 3.7 run_project / get_debug_output / stop_project
-- [ ] 3.8 git commit
+- [v] 3.1 Blender 建模 crate（單一 mesh `crate-col`：0.92 箱體 + 12 根 0.08 框條，2 個材質）
+- [v] 3.2 截圖自檢（用 `look` 取代 get_viewport_screenshot；框條調深一次）
+- [v] 3.3 標準 export
+- [v] 3.4 node tools/import.mjs（main.tscn 不存在的 ERROR 屬預期，Phase 5 才建）
+- [v] 3.5 node tools/check_assets.mjs crate PASS（iter 1）
+- [v] 3.6 建立 test_crate.tscn 並 instance crate.glb（add_node 不能 instance，直接編輯 .tscn；見 log）
+- [v] 3.7 run_project / get_debug_output / stop_project（run_project 支援 scene 參數，無錯誤）
+- [v] 3.8 git commit
 
 ## Phase 4：其餘資產
 - [ ] 4.1 player（步驟 1–5）
