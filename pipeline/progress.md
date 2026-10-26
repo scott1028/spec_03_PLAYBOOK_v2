@@ -42,11 +42,11 @@
 - [v] 3.8 git commit
 
 ## Phase 4：其餘資產
-- [ ] 4.1 player（步驟 1–5）
-- [ ] 4.1 coin（步驟 1–5）
-- [ ] 4.1 goal_flag（步驟 1–5）
-- [ ] 4.2 node tools/check_assets.mjs 全部 PASS
-- [ ] 4.3 git commit
+- [v] 4.1 player（步驟 1–5；iter 2 PASS，iter 1 為 pipeline 問題：隱藏 collection 的物件被一起匯出，見 log）
+- [v] 4.1 coin（步驟 1–5；iter 1 PASS）
+- [v] 4.1 goal_flag（步驟 1–5；iter 1 PASS）
+- [v] 4.2 node tools/check_assets.mjs 全部 PASS（4 pass, 0 fail）
+- [v] 4.3 git commit
 
 ## Phase 5：Godot 遊戲實作
 - [ ] 5.1 建立 main.tscn
